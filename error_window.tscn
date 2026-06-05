@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://36mg15nhh7ld"]
+[gd_scene load_steps=5 format=3 uid="uid://36mg15nhh7ld"]
 
 [ext_resource type="Theme" uid="uid://ddpvdh1tvpifa" path="res://Theme.tres" id="1_rhy2t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qpk6s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5kfmd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4mkvc"]
 
 [node name="ErrorWindow" type="Window"]
 initial_position = 1
@@ -85,16 +91,26 @@ offset_bottom = 11.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "AN ERROR OCCURED - "
 
-[node name="Title2" type="Label" parent="Main"]
+[node name="Title2" type="TextEdit" parent="Main"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 6.0
-offset_top = 14.0
+offset_top = 18.0
 offset_right = -5.0
-offset_bottom = 14.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 1)
+theme_override_colors/font_readonly_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/selection_color = Color(0.162066, 0.162066, 0.162066, 1)
+theme_override_constants/line_spacing = -4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qpk6s")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5kfmd")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_4mkvc")
 text = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
-autowrap_mode = 3
+editable = false
+wrap_mode = 1

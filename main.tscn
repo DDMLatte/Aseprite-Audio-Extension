@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c3kylks048cvw"]
+[gd_scene load_steps=16 format=3 uid="uid://c3kylks048cvw"]
 
 [ext_resource type="Theme" uid="uid://ddpvdh1tvpifa" path="res://Theme.tres" id="1_0owl6"]
 [ext_resource type="Script" uid="uid://ccqs633g5bqb5" path="res://scripts/main.gd" id="1_nivy1"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://bniodwyreatpq" path="res://fonts/AsepriteFont.ttf" id="6_4c57u"]
 [ext_resource type="Texture2D" uid="uid://g1w45iqmfp4j" path="res://textures/ddm2.png" id="6_8n218"]
 [ext_resource type="Texture2D" uid="uid://cg5026mp0ptw8" path="res://textures/AtlasFileSelect.tres" id="7_2v3e4"]
+[ext_resource type="Script" uid="uid://cjl71xueqhv7q" path="res://scripts/help_menu_underline.gd" id="7_dg77c"]
 [ext_resource type="Shader" uid="uid://drwfv1ayr5iwa" path="res://waveform_posteriorize.gdshader" id="8_gvu2m"]
 [ext_resource type="Texture2D" uid="uid://bqephtxnm5sks" path="res://textures/ddm3.png" id="9_efxa6"]
 [ext_resource type="Texture2D" uid="uid://us3pvooixgfx" path="res://textures/ase-export.png" id="9_kek77"]
@@ -154,7 +155,8 @@ offset_left = 3.0
 offset_top = -2.0
 offset_right = 165.0
 offset_bottom = 18.0
-text = "ASEPRITE AUDIO EXTENSION v2.2.1"
+text = "ASEPRITE AUDIO EXTENSION v2.3
+"
 
 [node name="Title" type="Label" parent="MainMenu/Control/Title"]
 show_behind_parent = true
@@ -163,7 +165,7 @@ offset_top = 1.0
 offset_right = 162.0
 offset_bottom = 21.0
 theme_override_colors/font_color = Color(0.776471, 0.776471, 0.776471, 1)
-text = "ASEPRITE AUDIO EXTENSION v2.2.1
+text = "ASEPRITE AUDIO EXTENSION v2.3
 "
 
 [node name="StatusText" type="Label" parent="MainMenu/Control"]
@@ -406,7 +408,7 @@ anchor_right = 1.0
 offset_left = 6.0
 offset_top = 2.0
 offset_right = -6.0
-offset_bottom = 134.0
+offset_bottom = 137.0
 grow_horizontal = 2
 focus_mode = 2
 theme_override_colors/default_color = Color(0, 0, 0, 1)
@@ -414,26 +416,38 @@ theme_override_constants/line_separation = -4
 theme_override_fonts/normal_font = ExtResource("6_4c57u")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_4c57u")
 bbcode_enabled = true
-text = "Thank you for downloading Aseprite Audio Extension!
+text = "Thank you for downloading AAE!
 
-If you found this tool helpful, consider [url=\"https://ddmplayer.itch.io/aseprite-audio-extension/purchase\"]donating[/url]!
+If you found this tool helpful, consider [underline][url=\"https://ddmlatte.itch.io/aseprite-audio-extension/purchase\"]donating[/url][/underline]!
 Even small amounts help fund my projects.
 
-Aseprite Audio Extension is provided for free at [url=\"https://ddmplayer.itch.io/aseprite-audio-extension\"]itch.io[/url].
+AAE is provided for free at [underline][url=\"https://ddmlatte.itch.io/aseprite-audio-extension\"]itch.io[/url][/underline] and [underline][url=\"https://github.com/DDMLatte/Aseprite-Audio-Extension\"]GitHub[/url][/underline].
 If you got it from somewhere else, run! Quick!
 If you found an issue, please contact me!
 
-Aseprite Audio Extension v2.2.1 by DDMPlayer.
-Aseprite font (as a .ttf) by haloflooder.
-Better Processes plugin by GreenFox.
-AAE v2.x is powered by the Godot 4 Engine.
-Aseprite by Igara Studio.
-[url=https://itch.io/post/10289107]Idea for pinning waveform by ijsje22[/url]"
+Aseprite Audio Extension v2.3 by [underline][url=\"https://ddmlatte.itch.io/\"]DDMLatte[/url][/underline]
+Aseprite font (as a .ttf) by [underline][url=\"https://www.youtube.com/haloflooder\"]haloflooder[/url][/underline]
+Better Processes plugin by [underline][url=\"https://gitlab.com/greenfox\"]GreenFox[/url][/underline]
+AAE v2.x is powered by the [underline][url=\"https://godotengine.org/\"]Godot 4 Engine[/url][/underline]
+Aseprite by [underline][url=\"https://www.aseprite.org/\"]Igara Studio[/url][/underline]
+Idea for [underline][url=\"https://itch.io/post/10289107\"]pinning waveform by ijsje22[/url][/underline]
+Linux port commissioned by [underline][url=\"https://rainbow-dye-games.itch.io/\"]RAINBOW DYE GAMES[/url][/underline]"
 scroll_active = false
 autowrap_mode = 2
+meta_underlined = false
 selection_enabled = true
 
-[node name="DDMPlayer" type="Control" parent="HelpMenu"]
+[node name="UnderlineRenderer" type="Control" parent="HelpMenu/Text" node_paths=PackedStringArray("label")]
+anchors_preset = 0
+offset_left = -6.0
+offset_top = -2.0
+offset_right = 34.0
+offset_bottom = 38.0
+script = ExtResource("7_dg77c")
+label = NodePath("..")
+metadata/_custom_type_script = "uid://cjl71xueqhv7q"
+
+[node name="DDMLatte" type="Control" parent="HelpMenu"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -447,25 +461,23 @@ offset_bottom = -31.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HelpMenu/DDMPlayer"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HelpMenu/DDMLatte"]
 modulate = Color(1, 1, 1, 0.12549)
 position = Vector2(-16, -16)
 sprite_frames = SubResource("SpriteFrames_ovwfn")
+autoplay = "default"
 frame_progress = 0.474504
 
 [node name="Back" type="Button" parent="HelpMenu"]
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = -37.0
-offset_top = -27.0
+offset_top = 5.0
 offset_right = -5.0
-offset_bottom = -9.0
+offset_bottom = 23.0
 grow_horizontal = 0
-grow_vertical = 0
 text = "Back"
 
 [node name="PathMenu" type="Control" parent="."]
@@ -486,7 +498,7 @@ offset_top = 29.0
 offset_right = -35.0
 offset_bottom = 49.0
 grow_horizontal = 2
-placeholder_text = "Locate Aseprite.exe with the file picker button."
+placeholder_text = "Locate Aseprite with the file picker button."
 
 [node name="PathLabel" type="Label" parent="PathMenu/PathText"]
 layout_mode = 1
@@ -498,7 +510,7 @@ offset_right = -6.0
 offset_bottom = -1.0
 grow_horizontal = 2
 theme_override_constants/line_spacing = -3
-text = "Aseprite path:"
+text = "Aseprite executable path:"
 
 [node name="SelectFile" type="Button" parent="PathMenu/PathText"]
 layout_mode = 1
@@ -545,7 +557,9 @@ grow_horizontal = 2
 theme_override_constants/line_spacing = -3
 text = "The selected path should be an executable file, and must not contain any surrounding characters. Alternatively, use the browser to add the path.
 
-Example: C:/path/to/Aseprite.exe"
+Example:
+C:/path/to/Aseprite.exe   (Windows)
+/path/to/Aseprite        (Linux)"
 autowrap_mode = 2
 justification_flags = 35
 

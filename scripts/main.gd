@@ -31,6 +31,14 @@ func _ready() -> void:
 	var is_first_time : bool = settings["is_first_time"];
 	settings["is_first_time"] = false;
 	
+	if(OS.get_name() == "Linux"):
+		var output := OS.execute("ffmpeg", ["-version"]);
+		if(output == 127):
+			Util.show_error_window(
+				"Couldn't find FFmpeg",
+				"Make sure to install FFmpeg by running 'sudo apt install ffmpeg' in your Terminal."
+			);
+	
 	if(is_first_time):
 		_on_setup_pressed.call_deferred();
 		set.call_deferred("route_to_credits", true);
@@ -89,7 +97,7 @@ func set_aseprite_path(new_path : String) -> void:
 	Aseprite.path = aseprite_path;
 	
 	if(!DirAccess.dir_exists_absolute(Aseprite.script_path.get_base_dir()) && DirAccess.dir_exists_absolute(aseprite_path.get_base_dir().path_join("scripts"))):
-		Aseprite.script_path = aseprite_path.get_base_dir().path_join("scripts/aseprite-audio-extension.lua");
+		Aseprite.set_script_path();
 
 
 func set_audio_path(new_path : String) -> void:
@@ -172,7 +180,7 @@ func _on_load_audio_pressed() -> void:
 	audio_path = (await Util.show_file_select(FileDialog.FileMode.FILE_MODE_OPEN_FILE, ["*.mp3", "*.ogg", "*.wav"]));
 
 func _on_select_file_pressed() -> void:
-	aseprite_path = (await Util.show_file_select(FileDialog.FileMode.FILE_MODE_OPEN_FILE, ["Aseprite.exe"]));
+	aseprite_path = (await Util.show_file_select(FileDialog.FileMode.FILE_MODE_OPEN_FILE, ["Aseprite.exe", "aseprite"]));
 
 func _on_activate_pressed() -> void:
 	Aseprite.activate();

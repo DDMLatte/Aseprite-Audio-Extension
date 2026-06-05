@@ -1,7 +1,7 @@
 extends Node
 
 var process_node : ProcessNode;
-var script_path := Util.user_folder.replace("AsepriteAudioExtension", "Aseprite").path_join("scripts/aseprite-audio-extension.lua");
+var script_path := "";
 var path := "";
 var sprite_path := "";
 var is_finished := true;
@@ -16,6 +16,7 @@ func _ready() -> void:
 	process_node.finished.connect(set_finished);
 	process_node.stdout.connect(handle_stdout);
 	add_child(process_node);
+	set_script_path();
 
 
 
@@ -35,6 +36,9 @@ func activate() -> void:
 		"-script",
 		script_path
 	]);
+	
+	print("Calling aseprite command: ", path);
+	print("Trying to run aseprite with following arguments: ", args);
 	
 	process_node.cmd = path;
 	process_node.args = args;
@@ -56,23 +60,32 @@ func guarantee_aseprite_path() -> bool:
 
 
 func guarantee_script_file() -> bool:
-	DirAccess.make_dir_recursive_absolute(script_path.get_base_dir());
+	set_script_path();
+	DirAccess.make_dir_absolute(script_path.get_base_dir());
 	
 	var script := FileAccess.open(script_path, FileAccess.WRITE);
 	if(script != null):
+		print("Writing string");
+		print("=========");
+		print(FileAccess.get_file_as_string("res://lua_script.txt"));
+		print("=========");
 		script.store_string(FileAccess.get_file_as_string("res://lua_script.txt"));
 		script.close();
+	
+	else:
+		printerr("script variable is null");
+		
 		
 	var error := FileAccess.get_open_error();
 	if(error != OK):
-		print("FAILED TO WRITE THE FILE. HOWEVER!!! THE PATH IS: ", script_path);
+		printerr("FILE FAIL: ", script, " -- ", error);
+		printerr("FAILED TO WRITE THE FILE. HOWEVER!!! THE PATH IS: ", script_path);
 		Util.show_error_window(
 			"Error",
-			"An error has occurred while trying to write the lua script. Below is the error message:\n\n" + error_string(error)
+			"An error has occurred while trying to write the lua script. Below is the error message:\n" + error_string(error)
 			+ "\n\nMore information:\n" + ("Passed first check" if DirAccess.dir_exists_absolute(script_path.get_base_dir()) else "Failed first check")
-			+ "\n" + ("AppData path" if script_path.to_lower().contains("appdata") else "Aseprite path")
+			+ "\nScript path: " + script_path
 		);
-		return FileAccess.file_exists(script_path);
 	
 	return FileAccess.file_exists(script_path);
 
@@ -112,11 +125,11 @@ func process_command(raw_command : String) -> void:
 
 
 func is_sprite_unsaved() -> bool:
-	return (!Aseprite.sprite_path.contains("/") && !Aseprite.sprite_path.contains("\\"));
+	return (!sprite_path.contains("/") && !sprite_path.contains("\\"));
 
 
 func is_sprite_valid() -> bool:
-	return Aseprite.sprite_path != "";
+	return sprite_path != "";
 
 
 func run_export_command() -> void:
@@ -190,3 +203,17 @@ func update_status() -> bool:
 func finish_export(out: int, process_node : Node) -> void:
 	finished_export = true;
 	process_node.queue_free();
+
+func set_script_path() -> void:
+	if(OS.get_name() == "Linux"):
+		print(OS.get_config_dir());
+		script_path = OS.get_config_dir().path_join("aseprite/scripts/aseprite-audio-extension.lua");
+		print(script_path);
+		return;
+	
+	if(path == ""):
+		script_path = Util.user_folder.replace("AsepriteAudioExtension", "Aseprite").path_join("scripts/aseprite-audio-extension.lua");
+		return;
+	
+	script_path = path.get_base_dir().path_join("scripts/aseprite-audio-extension.lua");
+	

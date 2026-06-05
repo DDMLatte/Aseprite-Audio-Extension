@@ -6,6 +6,9 @@ func _ready() -> void:
 	if(OS.is_debug_build()):
 		ffmpeg_path = Util.user_folder.path_join("ffmpeg.exe");
 	
+	if(OS.get_name() == "Linux"):
+		ffmpeg_path = "ffmpeg";
+	
 	verify_ffmpeg();
 
 
@@ -27,8 +30,15 @@ func generate_waveform(stream : AudioStream, path : String) -> ImageTexture:
 	return null;
 
 
-
+var linux_last_found_ffmpeg := false; # Cache if FFmpeg was found
 func verify_ffmpeg() -> bool:
+	if(OS.get_name() == "Linux"):
+		if(linux_last_found_ffmpeg): return true;
+		var out := OS.execute("ffmpeg", [], []);
+		if(out != 127): linux_last_found_ffmpeg = true;
+		print("linux_last_found_ffmpeg: ", linux_last_found_ffmpeg);
+		return linux_last_found_ffmpeg;
+	
 	if(!FileAccess.file_exists(ffmpeg_path)):
 		Util.show_error_window("Couldn't find FFmpeg.", "Couldn't find ffmpeg.exe under Aseprite Audio Extension's download location. Double-check your installation and try again.");
 	
@@ -53,7 +63,7 @@ func run_export_command(audio_path : String, export_path : String) -> void:
 		"-i", concat,										# Image
 		"-i", audio_path,						# Audio
 		#"-vf", "\"scale=2:2:flags=neighbor\"",
-		"-fps_mode", "vfr",
+		#"-fps_mode", "vfr",
 		"-c:v", "libx264", "-pix_fmt", "yuv420p",
 		"-t", str(duration),
 		output,												# Output
