@@ -7,13 +7,18 @@ Hello, I'm DDMLatte! Aseprite Audio Extension (AAE) is an external program that 
 
 ## Requirements
 - [Godot Engine 4.4](https://godotengine.org/)
-- Windows*
-- An [FFmpeg binary](https://ffmpeg.org/download.html) (feel free to compile or download one)
+- [Aseprite v1.2.40+](https://aseprite.org/)
+
+**For Windows, you also need an [FFmpeg binary](https://ffmpeg.org/download.html) (feel free to compile or download one).**
+Place it on the project root under the filename "ffmpeg.exe".
+
+**For Linux, you also need FFmpeg, but you must install it through the Terminal.**
+In the Terminal, run the command `sudo apt install ffmpeg` to install FFmpeg on your device.
 
 To install the project:
 - clone or download and extract the source code for this repository;
-- add the FFmpeg executable to the root of the project under the filename "ffmpeg.exe"; and
-- add it as a project in Godot.
+- add the FFmpeg executable to the root of the project under the filename "ffmpeg.exe" if required; and
+- import it as a project in Godot.
 
 
 The final project folder should look something like this:
@@ -28,10 +33,8 @@ The final project folder should look something like this:
 ├─  .gitattributes
 ├─  .gitignore
 ├─  etc...
-├─  ffmpeg.exe
+├─  ffmpeg.exe (if you're running the tool on Windows)
 ```
-
-\* This tool has been developed exclusively in Windows, and as such, I did not test out any other operating system. I tried to keep the code cross-platform, but it's very likely functionality may not work as expected in other operating systems.
 
 
 # Building
