@@ -1,5 +1,7 @@
 extends Node
 
+signal changed_active_sprite();
+
 var process_node : ProcessNode;
 var script_path := "";
 var path := "";
@@ -117,6 +119,8 @@ func process_command(raw_command : String) -> void:
 			stop_timer = float(value) / 1000.0 + 0.05;
 		
 		"s":
+			if(str(value) != sprite_path):
+				changed_active_sprite.emit.call_deferred();
 			sprite_path = str(value);
 		
 		"x":

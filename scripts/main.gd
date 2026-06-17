@@ -9,14 +9,18 @@ var extension_path := "";
 var aseprite_path := "" : set = set_aseprite_path;
 var audio_path := "" : set = set_audio_path;
 
+var muted := false : set = set_mute;
+
 var route_to_credits := false : set = set_route_to_credits;
 var settings := {
 	"aseprite_path": "",
 	"is_first_time": true,
+	"audiofile_map": {}
 };
 
 
 func _ready() -> void:
+	Aseprite.changed_active_sprite.connect(_on_changed_active_sprite);
 	extension_path = OS.get_executable_path().get_base_dir() + "/";
 	
 	var cmd_aseprite_path = [];
@@ -105,6 +109,15 @@ func set_audio_path(new_path : String) -> void:
 	var file_display : Label = $MainMenu/Control/LoadAudio/Path;
 	audio_player.stream = stream;
 	waveform.texture = null;
+	
+	
+	# Save path to audiofile map for QoL
+	var sprite_path := Aseprite.sprite_path;
+	if(FileAccess.file_exists(sprite_path)):
+		var map : Dictionary = settings["audiofile_map"] if "audiofile_map" in settings else {};
+		map.set(sprite_path, new_path);
+		save_settings();
+	
 	
 	if(stream == null):
 		file_display.text = "No file selected.";
@@ -265,3 +278,28 @@ func set_route_to_credits(value: bool) -> void:
 
 func update_export_progress(progress: float) -> void:
 	%ExportProgress.size.x = lerp(0.0, %ExportProgress.get_parent().size.x, progress);
+
+
+func set_mute(mute_value: bool) -> void:
+	muted = mute_value;
+	
+	$MainMenu/WaveformRect/Background/MuteBackground.visible = muted;
+	$MainMenu/WaveformRect/Mute.button_pressed = muted;
+	
+	audio_player.volume_linear = 0.0 if muted else 1.0;
+
+
+func _on_mute_toggled(toggled_on: bool) -> void:
+	muted = !muted;
+
+
+func _on_changed_active_sprite() -> void:
+	# Save path to audiofile map for QoL
+	var sprite_path := Aseprite.sprite_path;
+	if(!FileAccess.file_exists(sprite_path)): return;
+	
+	var map : Dictionary = settings["audiofile_map"] if "audiofile_map" in settings else {};
+	if(!map.has(sprite_path)): return;
+	
+	var path : String = map.get(sprite_path);
+	audio_path = path;

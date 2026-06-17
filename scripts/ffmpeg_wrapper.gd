@@ -4,7 +4,7 @@ var ffmpeg_path := OS.get_executable_path().get_base_dir().path_join("ffmpeg.exe
 
 func _ready() -> void:
 	if(OS.is_debug_build()):
-		ffmpeg_path = Util.user_folder.path_join("ffmpeg.exe");
+		ffmpeg_path = ProjectSettings.globalize_path("res://ffmpeg.exe");
 	
 	if(OS.get_name() == "Linux"):
 		ffmpeg_path = "ffmpeg";
@@ -39,6 +39,7 @@ func verify_ffmpeg() -> bool:
 		print("linux_last_found_ffmpeg: ", linux_last_found_ffmpeg);
 		return linux_last_found_ffmpeg;
 	
+	print(ffmpeg_path);
 	if(!FileAccess.file_exists(ffmpeg_path)):
 		Util.show_error_window("Couldn't find FFmpeg.", "Couldn't find ffmpeg.exe under Aseprite Audio Extension's download location. Double-check your installation and try again.");
 	
